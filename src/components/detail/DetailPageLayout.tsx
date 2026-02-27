@@ -30,7 +30,7 @@ export function DetailPageLayout({
 }: DetailPageLayoutProps) {
   return (
     <article className="min-h-screen pt-24 pb-24 px-6 md:px-12">
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <Link
           href={backHref}
           className="inline-flex items-center gap-1.5 text-xs lowercase tracking-wide text-[#bbb] hover:text-[#777] mb-12 transition-colors font-sans"

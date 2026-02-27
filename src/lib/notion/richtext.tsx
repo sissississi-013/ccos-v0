@@ -5,6 +5,16 @@ export function renderRichText(richTexts: RichText[]): React.ReactNode {
   if (!richTexts || richTexts.length === 0) return null;
 
   return richTexts.map((text, i) => {
+    // Inline equation
+    if (text.type === "equation") {
+      const expr = (text as unknown as { equation: { expression: string } }).equation?.expression || text.plain_text;
+      return (
+        <code key={i} className="bg-gray-50 px-1.5 py-0.5 rounded text-sm font-mono text-[#333]">
+          {expr}
+        </code>
+      );
+    }
+
     let content: React.ReactNode = text.plain_text;
 
     if (text.annotations.bold) {
