@@ -3,6 +3,8 @@ import { getPageBySlug } from "@/lib/notion/queries";
 import { getPageBlocks } from "@/lib/notion/blocks";
 import { NotionRenderer } from "@/components/notion/NotionRenderer";
 import { DetailPageLayout } from "@/components/detail/DetailPageLayout";
+
+export const revalidate = 0;
 import { SECTIONS } from "@/lib/constants";
 
 const section = SECTIONS[4]; // life
@@ -35,6 +37,11 @@ export default async function LifeDetailPage({
       : page.cover?.type === "file"
         ? page.cover.file.url
         : null;
+  const mediaProp = props.Media ?? props.media;
+  const media = mediaProp?.type === "url" ? mediaProp.url
+    : mediaProp?.type === "files" && mediaProp.files?.[0]
+      ? (mediaProp.files[0].file?.url ?? mediaProp.files[0].external?.url)
+      : undefined;
   const tags = props.Tags?.multi_select?.map((t: { name: string }) => t.name) ?? [];
   const date = props.Date?.date?.start ?? props["Publish Date"]?.date?.start ?? props["Completion Date"]?.date?.start ?? "";
 
@@ -42,6 +49,7 @@ export default async function LifeDetailPage({
     <DetailPageLayout
       title={title}
       cover={cover}
+      media={media}
       tags={tags}
       date={date}
       color={section.color}

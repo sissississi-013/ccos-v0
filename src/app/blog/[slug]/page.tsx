@@ -3,6 +3,8 @@ import { getPageBySlug } from "@/lib/notion/queries";
 import { getPageBlocks } from "@/lib/notion/blocks";
 import { NotionRenderer } from "@/components/notion/NotionRenderer";
 import { DetailPageLayout } from "@/components/detail/DetailPageLayout";
+
+export const revalidate = 0;
 import { SECTIONS } from "@/lib/constants";
 
 const section = SECTIONS[0]; // blogs

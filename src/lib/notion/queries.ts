@@ -46,6 +46,18 @@ function getUrl(property: any): string | undefined {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+function getFileUrl(property: any): string | undefined {
+  if (!property) return undefined;
+  if (property.type === "url" && property.url) return property.url;
+  if (property.type === "files" && property.files?.length > 0) {
+    const file = property.files[0];
+    if (file.type === "file") return file.file?.url;
+    if (file.type === "external") return file.external?.url;
+  }
+  return undefined;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getSelect(property: any): string | undefined {
   if (!property || property.type !== "select" || !property.select) return undefined;
   return property.select.name;
@@ -55,6 +67,20 @@ function getSelect(property: any): string | undefined {
 function getStatus(property: any): string | undefined {
   if (!property || property.type !== "status" || !property.status) return undefined;
   return property.status.name;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function getCheckbox(property: any): boolean {
+  if (!property || property.type !== "checkbox") return false;
+  return !!property.checkbox;
+}
+
+function sortPinned<T extends { pinned?: boolean }>(items: T[]): T[] {
+  return items.sort((a, b) => {
+    if (a.pinned && !b.pinned) return -1;
+    if (!a.pinned && b.pinned) return 1;
+    return 0;
+  });
 }
 
 /**
@@ -72,19 +98,21 @@ export async function getBlogs(): Promise<BlogItem[]> {
     });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return response.results.map((page: any) => {
+    const items = response.results.map((page: any) => {
       const props = page.properties;
       return {
         id: page.id,
         slug: page.id,
         title: getPlainText(props.Title),
-        description: "",
+        description: getPlainText(props.Summary ?? props.summary) || "",
         cover: getCover(page) || getUrl(props["Featured Image"]) || null,
         tags: getTags(props.Tags),
         date: getDate(props["Publish Date"]) || page.created_time?.split("T")[0] || "",
         lastEdited: page.last_edited_time,
+        pinned: getCheckbox(props.Pinned ?? props.pinned),
       };
     });
+    return sortPinned(items);
   } catch (error) {
     console.error("Notion query failed:", error);
     return [];
@@ -106,7 +134,7 @@ export async function getProjects(): Promise<ProjectItem[]> {
     });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return response.results.map((page: any) => {
+    const items = response.results.map((page: any) => {
       const props = page.properties;
       return {
         id: page.id,
@@ -114,14 +142,17 @@ export async function getProjects(): Promise<ProjectItem[]> {
         title: getPlainText(props["Project name"]),
         description: getPlainText(props.Description),
         cover: getCover(page),
-        tags: [],
+        tags: getTags(props.Tags ?? props["Tech Stack"] ?? props.tags),
         date: getDate(props.Date) || page.created_time?.split("T")[0] || "",
         lastEdited: page.last_edited_time,
+        media: getFileUrl(props.Media ?? props.media),
         link: getUrl(props.Link),
         github: getUrl(props.GitHub),
         status: getStatus(props.status),
+        pinned: getCheckbox(props.Pinned ?? props.pinned),
       };
     });
+    return sortPinned(items);
   } catch (error) {
     console.error("Notion query failed:", error);
     return [];
@@ -141,7 +172,7 @@ export async function getArt(): Promise<ArtItem[]> {
     });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return response.results.map((page: any) => {
+    const items = response.results.map((page: any) => {
       const props = page.properties;
       return {
         id: page.id,
@@ -152,9 +183,12 @@ export async function getArt(): Promise<ArtItem[]> {
         tags: [],
         date: getPlainText(props["Year Created"]) || page.created_time?.split("T")[0] || "",
         lastEdited: page.last_edited_time,
+        media: getFileUrl(props.Media ?? props.media),
         medium: getSelect(props.Medium),
+        pinned: getCheckbox(props.Pinned ?? props.pinned),
       };
     });
+    return sortPinned(items);
   } catch (error) {
     console.error("Notion query failed:", error);
     return [];
@@ -177,7 +211,7 @@ export async function getResearch(): Promise<ResearchItem[]> {
     });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return response.results.map((page: any) => {
+    const items = response.results.map((page: any) => {
       const props = page.properties;
       return {
         id: page.id,
@@ -188,10 +222,13 @@ export async function getResearch(): Promise<ResearchItem[]> {
         tags: getTags(props.Tags),
         date: getDate(props["Completion Date"]) || getDate(props["Start Date"]) || page.created_time?.split("T")[0] || "",
         lastEdited: page.last_edited_time,
+        media: getFileUrl(props.Media ?? props.media),
         venue: getPlainText(props.Notes),
         pdf: getUrl(props["Source URL"]),
+        pinned: getCheckbox(props.Pinned ?? props.pinned),
       };
     });
+    return sortPinned(items);
   } catch (error) {
     console.error("Notion query failed:", error);
     return [];
@@ -212,7 +249,7 @@ export async function getLife(): Promise<LifeItem[]> {
     });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return response.results.map((page: any) => {
+    const items = response.results.map((page: any) => {
       const props = page.properties;
       return {
         id: page.id,
@@ -223,8 +260,12 @@ export async function getLife(): Promise<LifeItem[]> {
         tags: [],
         date: getDate(props.Date) || page.created_time?.split("T")[0] || "",
         lastEdited: page.last_edited_time,
+        media: getFileUrl(props.Media ?? props.media),
+        type: getSelect(props.Type),
+        pinned: getCheckbox(props.Pinned ?? props.pinned),
       };
     });
+    return sortPinned(items);
   } catch (error) {
     console.error("Notion query failed:", error);
     return [];

@@ -21,7 +21,7 @@ export function SideNav() {
             className="group relative flex items-center justify-end"
             aria-label={`Scroll to ${section.label}`}
           >
-            <span className="absolute right-7 px-2 py-0.5 text-xs lowercase tracking-wide text-[#777] bg-white rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+            <span className="absolute right-7 text-xs lowercase tracking-wide text-[#999] opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
               <T>{section.label}</T>
             </span>
             <motion.span

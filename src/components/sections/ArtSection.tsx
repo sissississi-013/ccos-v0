@@ -1,33 +1,20 @@
 "use client";
 
 import { SectionWrapper } from "./SectionWrapper";
-import { ContentCard } from "./ContentCard";
+import { ArtGallery } from "@/components/gallery/ArtGallery";
+import { T } from "@/components/translation/T";
 import type { ArtItem } from "@/lib/notion/types";
 import { SECTIONS } from "@/lib/constants";
 
-const section = SECTIONS[2];
+const section = SECTIONS[3];
 
 export function ArtSection({ items }: { items: ArtItem[] }) {
   return (
     <SectionWrapper id={section.id} label={section.label} color={section.color}>
-      <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory -mx-6 px-6 md:-mx-12 md:px-12 lg:-mx-24 lg:px-24">
-        {items.map((item, i) => (
-          <div key={item.id} className="min-w-[280px] md:min-w-[320px] lg:min-w-[350px] snap-start shrink-0">
-            <ContentCard
-              title={item.title}
-              description={item.description}
-              cover={item.cover}
-              tags={item.tags}
-              date={item.date}
-              href={`/art/${item.slug}`}
-              color={section.color}
-              index={i}
-            />
-          </div>
-        ))}
-      </div>
-      {items.length === 0 && (
-        <p className="text-sm text-[#bbb] italic">Nothing here yet.</p>
+      {items.length > 0 ? (
+        <ArtGallery items={items} color={section.color} />
+      ) : (
+        <p className="text-sm text-[#bbb] italic"><T>Nothing here yet.</T></p>
       )}
     </SectionWrapper>
   );

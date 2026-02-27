@@ -15,7 +15,8 @@ export function SectionWrapper({ id, label, color, children }: SectionWrapperPro
   return (
     <section
       id={id}
-      className="px-6 py-16 md:px-12 md:py-20 lg:px-24"
+      className="px-6 py-16 md:px-12 md:py-20 lg:px-24 section-colored"
+      style={{ "--section-color": color } as React.CSSProperties}
     >
       <motion.div
         initial={{ opacity: 0 }}
@@ -24,7 +25,7 @@ export function SectionWrapper({ id, label, color, children }: SectionWrapperPro
         viewport={{ once: true, margin: "-80px" }}
       >
         <h2
-          className="text-lg font-light tracking-wide lowercase mb-10 text-[#999]"
+          className="text-lg font-light tracking-wide lowercase mb-10 text-[#999] hover:text-[var(--section-color)] transition-colors duration-300 cursor-default"
         >
           <T>{label}</T>
         </h2>

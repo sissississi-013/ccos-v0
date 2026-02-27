@@ -18,29 +18,32 @@ export function LanguageSwitcher() {
   };
 
   return (
-    <div className="flex items-center gap-3 text-xs lowercase tracking-wide">
+    <div
+      className="flex items-center gap-3 lowercase tracking-wide"
+      style={{ fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif", fontSize: "12px" }}
+    >
       <button
         onClick={() => setLanguage("en")}
-        className={`transition-colors ${
-          language === "en" ? "text-[#1C1C1C]" : "text-[#bbb] hover:text-[#777]"
+        className={`transition-colors cursor-pointer ${
+          language === "en" ? "text-[#1C1C1C]" : "text-[#999] hover:text-[#555]"
         }`}
       >
         en
       </button>
-      <span className="text-[#ddd]">/</span>
+      <span className="text-[#ccc]">/</span>
       <button
         onClick={() => setLanguage("zh")}
-        className={`transition-colors ${
-          language === "zh" ? "text-[#1C1C1C]" : "text-[#bbb] hover:text-[#777]"
+        className={`transition-colors cursor-pointer ${
+          language === "zh" ? "text-[#1C1C1C]" : "text-[#999] hover:text-[#555]"
         }`}
       >
         cn
       </button>
-      <span className="text-[#ddd]">/</span>
+      <span className="text-[#ccc]">/</span>
       <button
         onClick={() => setShowInput(!showInput)}
-        className={`transition-colors ${
-          !["en", "zh"].includes(language) ? "text-[#1C1C1C]" : "text-[#bbb] hover:text-[#777]"
+        className={`transition-colors cursor-pointer ${
+          !["en", "zh"].includes(language) ? "text-[#1C1C1C]" : "text-[#999] hover:text-[#555]"
         }`}
       >
         ?
@@ -52,7 +55,8 @@ export function LanguageSwitcher() {
             value={customInput}
             onChange={(e) => setCustomInput(e.target.value)}
             placeholder="pirate, uwu..."
-            className="w-24 px-2 py-0.5 text-xs border-b border-[#ddd] bg-transparent focus:outline-none focus:border-[#777] lowercase"
+            className="w-24 px-2 py-0.5 border-b border-[#ddd] bg-transparent focus:outline-none focus:border-[#777] lowercase"
+            style={{ fontSize: "12px" }}
             autoFocus
           />
         </form>

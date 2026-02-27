@@ -4,9 +4,11 @@ export interface ContentItem {
   title: string;
   description: string;
   cover: string | null;
+  media?: string;
   tags: string[];
   date: string;
   lastEdited: string;
+  pinned?: boolean;
 }
 
 export interface BlogItem extends ContentItem {
@@ -28,7 +30,9 @@ export interface ResearchItem extends ContentItem {
   pdf?: string;
 }
 
-export interface LifeItem extends ContentItem {}
+export interface LifeItem extends ContentItem {
+  type?: string;
+}
 
 export interface NotionBlock {
   id: string;

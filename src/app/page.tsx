@@ -7,6 +7,8 @@ import { ResearchSection } from "@/components/sections/ResearchSection";
 import { LifeSection } from "@/components/sections/LifeSection";
 import { Footer } from "@/components/layout/Footer";
 
+export const revalidate = 0;
+
 export default async function Home() {
   const [blogs, projects, art, research, life] = await Promise.all([
     getBlogs(),
@@ -19,12 +21,12 @@ export default async function Home() {
   return (
     <>
       {/* White content layer — covers the fixed video behind it */}
-      <main className="relative z-10 bg-white">
+      <main className="relative z-10 bg-white pb-32 md:pb-40">
         <HeroSection />
         <BlogSection items={blogs} />
         <ProjectSection items={projects} />
-        <ArtSection items={art} />
         <ResearchSection items={research} />
+        <ArtSection items={art} />
         <LifeSection items={life} />
       </main>
 

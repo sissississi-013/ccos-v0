@@ -47,7 +47,7 @@ export function NotionRenderer({ blocks }: { blocks: NotionBlock[] }) {
   if (currentNumberedList.length > 0) grouped.push(currentNumberedList);
 
   return (
-    <div className="max-w-3xl mx-auto space-y-4">
+    <div className="notion-content max-w-3xl mx-auto space-y-4">
       {grouped.map((item, i) => {
         if (Array.isArray(item)) {
           const type = item[0].type;
